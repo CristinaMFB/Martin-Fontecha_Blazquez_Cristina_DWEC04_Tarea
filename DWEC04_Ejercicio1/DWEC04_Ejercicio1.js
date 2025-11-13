@@ -27,14 +27,14 @@ un tipo de artículo (por ejemplo, "Electrónica") y un precio máximo.
 La función debe devolver un array con todos los artículos que pertenezcan 
 a ese tipo y tengan un precio menor o igual al especificado.*/
 
-function funcion1 (articulos, tipoArticulo, precioMaximo) { //Función que recibe como parámetro el array articulos, tipoArticulo y precioMaximo
+function buscarTipoPrecioMax (articulos, tipoArticulo, precioMaximo) { //Función que recibe como parámetro el array articulos, tipoArticulo y precioMaximo
     /*Uso filter para recorrer el array articulos, se devuelven los articulos cuyo tipo sea igual a tipoArticulo y 
     cuyo precio sea menor que el precioMaximo. Esto se almacena en un nuevo array busquedaArticulos*/
-    let busquedaArticulos = articulos.filter(articulo =>
+    let resultado = articulos.filter(articulo =>
          articulo.tipo === tipoArticulo && articulo.precio <= precioMaximo
     );
     //Se devuelve el nuevo array con los articulos encontrados
-    return busquedaArticulos;
+    return resultado;
 }
 
 /*APARTADO 2.
@@ -43,40 +43,42 @@ modifique las descripciones de los artículos para que todas las descripciones
 comiencen con mayúsculas y el resto de las letras estén en minúsculas. 
 La función debe devolver el array modificado.*/
 
-function funcion2 (articulos) { //Función que recibe únicamente el array articulos
+function modificarDescripciones (articulos) { //Función que recibe únicamente el array articulos
     /*Uso map para recorrer y transformar cada artículo.*/
-    let descripcionModificada = articulos.map(articulo => { 
+    let resultado = articulos.map(articulo => { 
         //Se almacena la descripción del articulo correspondiente en minúscula
-        let descripcionMinus = articulo.descripcion.toLowerCase();
+        let descripcionMinusculas = articulo.descripcion.toLowerCase();
         //Se almacena la primera letra de la descripción del artículo correspondiente en mayúscula
-        let descripcionInicial = descripcionMinus.charAt(0).toUpperCase();
+        let descripcionInicial = descripcionMinusculas.charAt(0).toUpperCase();
         //Se concatena la primera letra mayúscula y el resto de la descripción en minúsculas. Uso slice para concatenar solo las minúsculas a partir del segundo caracter
-        let descripcionFinal = descripcionInicial + descripcionMinus.slice(1);
+        let descripcionFinal = descripcionInicial + descripcionMinusculas.slice(1);
         //Se actualiza la propiedad descripcion del artículo
         articulo.descripcion = descripcionFinal;
         //Se devuelve el artículo modificado
         return articulo;
     });
     //Se devuelve el array completo con las descripciones cambiadas
-    return descripcionModificada;
+    return resultado;
 }
 
 /*APARTADO 3.
 Escribe una función que reciba como parámetro el array de artículos y una cadena. 
 La función debe devolver un array con los artículos que tienen esa cadena en la descripción.*/
-function funcion3(articulos, cad) { //Función que recibe el array articulos y una cadena
-    /*Uso filter de nuevo, para recorrer el array y buscar los artículos que contengan la cadena "cad" en su descripción.*/
-    //En este caso, uso también includes para seleccionar las descripciones que contengan "cad", además de convertir tanto la descripción como cad a minúsculas para que coincidan
-   let buscarCadena = articulos.filter(articulo => {
-    return articulo.descripcion.toLowerCase().includes(cad.toLowerCase());
+function buscarCadena(articulos, cadenaBuscada) { //Función que recibe el array articulos y una cadena
+    /*Uso filter de nuevo, para recorrer el array y buscar los artículos que contengan la cadena "cadenaBuscada" en su descripción.*/
+    //En este caso, uso también includes para seleccionar las descripciones que contengan "cadenaBuscada", además de convertir tanto la descripción como cadenaBuscada a minúsculas para que coincidan
+   let resultado = articulos.filter(articulo => {
+    cadenaMinusculas = cadenaBuscada.toLowerCase();
+    descripcionMinusculas = articulo.descripcion.toLowerCase();
+    return descripcionMinusculas.includes(cadenaMinusculas)
    });
 
    //Si no se encuentra nada, es porque no coincide ninguna descripción
-   if(buscarCadena.length === 0) {
+   if(resultado.length === 0) {
     return "No se han encontrado coincidencias.";
    }
    //Se devuelve el array nuevo con los artículos que coinciden
-    return buscarCadena;
+    return resultado;
 }
 
 /*APARTADO 4.
@@ -86,16 +88,16 @@ la cantidad y el precio medio de los artículos de ese tipo.
 
 Ejemplo de parámetro: "Electrónica"
 Ejemplo de salida: { "cantidad": 8, "preciomedio": 113.74 }*/
-function funcion4(articulos, tipoArticulo) { //Función que recibe el array articulos y tipoArticulo
+function articulosPorTipo(articulos, tipoArticulo) { //Función que recibe el array articulos y tipoArticulo
     //Uso de nuevo filter para buscar dentro de cada artículo, los que su tipo coincide con el tipoArticulo indicado
-    let articulosTipo = articulos.filter(articulo => {
+    let resultado = articulos.filter(articulo => {
         return articulo.tipo === tipoArticulo;
     });
-    //La cantidad de artículos es igual a la longitud de articulosTipo 
-    let cantidad = articulosTipo.length;
+    //La cantidad de artículos es igual a la longitud de resultado 
+    let cantidad = resultado.length;
 
     //Uso reduce para sumar los precios de los artículos. Introduzco suma, que comienza en cero, para ir sumando todos los precios.
-    let sumaTotal = articulosTipo.reduce((suma, articulo) => {
+    let sumaTotal = resultado.reduce((suma, articulo) => {
         return suma + articulo.precio;
     }, 0);
 
@@ -118,10 +120,10 @@ function funcion4(articulos, tipoArticulo) { //Función que recibe el array arti
 /*APARTADO 5.
 Escribe una función que reorganice el array de artículos según el precio, 
 en orden ascendente o descendente (según un parámetro de entrada).*/
-function funcion5(articulos, ordenar) { //Función que recibe el array articulos y ordenar
-    let copiaArticulos = articulos.slice(); //Uso slice para crear una copia del array articulos
+function ordenarArticulos(articulos, ordenar) { //Función que recibe el array articulos y ordenar
+    let articulosCopia = articulos.slice(); //Uso slice para crear una copia del array articulos
     let orden = ordenar.toLowerCase(); //Uso la variable orden para almacenar la cadena que se ha introducido como parámetro en minúsculas, para que no importe si está en minúsculas o no
-    let resultadoOrdenado;
+    let resultado;
 
     /*En ambos casos uso sort, que es un método para ordenar elementos. Como quiero ordenar por número (de mayor a menor o de menor a mayor),
     uso una función de comparación.*/
@@ -130,39 +132,39 @@ function funcion5(articulos, ordenar) { //Función que recibe el array articulos
         - Si el resultado es negativo, el primer artículo va antes que el segundo.
         - Si el resultado es positivo, el segundo artículo va antes que el primero.
         - Si es 0, no se cambia el orden.*/
-        resultadoOrdenado = copiaArticulos.sort((a, b) => a.precio - b.precio);
+        resultado = articulosCopia.sort((a, b) => a.precio - b.precio);
     }
     else if (orden === "desc" || orden === "descendente") {
         /*Se hace la resta de los precios.
         - Si el resultado es negativo, el segundo artículo va antes que el primero.
         - Si el resultado es positivo, el primer artículo va antes que el segundo.
         - Si es 0, no se cambia el orden.*/
-        resultadoOrdenado = copiaArticulos.sort((a, b) => b.precio - a.precio);
+        resultado = articulosCopia.sort((a, b) => b.precio - a.precio);
     }
     //Si el parámetro de ordenar no coincide con ninguna opción, se indica que no es válido.
     else {
         return "Error. Orden no válido.";
     }
     //Se devuelve el array ordenado
-    return resultadoOrdenado;
+    return resultado;
 }
 
 /*COMPROBACIONES*/
 console.log("Función 1. Buscando artículos de electrónica y precio máximo 100.");
-console.log(funcion1(articulos, "Electrónica", 100));
+console.log(buscarTipoPrecioMax(articulos, "Electrónica", 100));
 console.log("Función 2. Descripción primera en mayúiscula y resto en minúsculas.");
-console.log(funcion2(articulos));
+console.log(modificarDescripciones(articulos));
 console.log("Función 3. Cadena: HDMI");
-console.log(funcion3(articulos, "HDMI"));
+console.log(buscarCadena(articulos, "HDMI"));
 console.log("Función 3. Una cadena que NO se encuentre en ninguna descripción.");
-console.log(funcion3(articulos, "Cristina Martín"));
+console.log(buscarCadena(articulos, "Cristina Martín"));
 console.log("Función 4. Tipo de artículo: Electrónica.");
-console.log(funcion4(articulos, "Electrónica"));
+console.log(articulosPorTipo(articulos, "Electrónica"));
 console.log("Función 5. Orden ascendente.");
-console.log(funcion5(articulos, "asc"));
+console.log(ordenarArticulos(articulos, "asc"));
 console.log("Función 5. Orden descendente.");
-console.log(funcion5(articulos, "descendente"));
+console.log(ordenarArticulos(articulos, "descendente"));
 console.log("Función 5. Orden erróneo.");
-console.log(funcion5(articulos, "Cristina Martín"));
+console.log(ordenarArticulos(articulos, "Cristina Martín"));
 
 
