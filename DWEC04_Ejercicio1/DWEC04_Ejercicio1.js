@@ -103,9 +103,9 @@ function funcion4(articulos, tipoArticulo) { //Función que recibe el array arti
     if (cantidad > 0) {
         precioMedio = (sumaTotal/cantidad).toFixed(2);
     }
-    //Si la cantidad de artículos es cero, como no se puede calcular la media, la media será cero directamente
+    //Si la cantidad de artículos es cero, es porque no se han encontrado artículos
     else {
-        precioMedio = 0;
+        return "No hay artículos de este tipo.";
     }
 
     //Se devuelve un objeto con la cantidad y el precio medio de los artículos que coinciden con ese tipo
